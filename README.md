@@ -6,5 +6,16 @@ Tinny game written in Kotlin using Kotlin/Native for SDL3 and SDL_image
 
 _Project currently only supports Windows x64_
 
-The repo provides its own SDL3 and SDL3_image libraries precompiled for windows.
-These are located in the `libs/`
+The repo provides its own SDL3 and SDL3_image libraries precompiled for windows. These are located in the `libs/`
+
+To Run:
+
+- Debug
+```bash
+./gradlew runDebugExecutableNative
+```
+- Release
+```bash
+./gradlew runReleaseExecutableNative
+```
+
