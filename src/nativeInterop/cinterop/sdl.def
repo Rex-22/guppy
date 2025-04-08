@@ -29,7 +29,3 @@ staticLibraries = SDL3.lib SDL3_image.lib
 headers.mingw_x64 = SDL3/SDL.h SDL3/SDL_video.h SDL3/SDL_error.h SDL3/SDL_render.h SDL_image/SDL_image.h
 libraryPaths.mingw_x64 = libs
 linkerOpts.mingw_x64 = -Lsdl -Lsdl_image
-
----
-struct SDL_Window;
-typedef struct SDL_Window SDL_Window;

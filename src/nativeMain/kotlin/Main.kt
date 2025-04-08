@@ -1,86 +1,66 @@
-import kotlinx.cinterop.*
 import net.ruben.sdl.*
-import platform.posix.getcwd
-import platform.windows.MAX_PATH
 
-data class Bunny @OptIn(ExperimentalForeignApi::class) constructor(
-    val positionX: Float,
-    val positionY: Float,
-    val speedX: Float,
-    val speedY: Float,
-    val color: SDL_Color
-)
-
-@OptIn(ExperimentalForeignApi::class)
 fun main() {
-    val workDir = nativeHeap.allocArray<ByteVar>(MAX_PATH)
-    getcwd(workDir, MAX_PATH)
     SdlLog.setLogCallback { userData, category, priority, message ->
         println("$message")
     }
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
+    if (!Sdl.init(SDL_INIT_VIDEO)) {
         SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
         return;
     }
 
-    val window = SDL_CreateWindow("SDL3", 800, 600, 0UL)
+    val window = SdlWindow.create("SDL3", 800, 600, 0UL)
     if (window == null) {
         SDL_Log("Couldn't create SDL Window: %s", SDL_GetError());
+        return;
     }
 
-    var renderer = SDL_CreateRenderer(window, null)
+    var renderer = SDLRenderer.create(window)
     if (renderer == null) {
         SDL_Log("Couldn't create SDL Renderer: %s", SDL_GetError());
+        return;
     }
 
-    var texture = IMG_LoadTexture(renderer, "textures/slime_walk1.png")
+    var texture = SdlTexture.create(renderer, "textures/slime_walk1.png")
     if (texture == null) {
-        SDL_Log("Couldn't load texture: %s", SDL_GetError());
+        return
     }
+
     var isRunning = true
     while (isRunning) {
-        memScoped {
-            val event = alloc<SDL_Event>()
-            while (SDL_PollEvent(event.ptr)) {
-                if (event.type == SDL_EVENT_QUIT) {
+        Sdl.pollEvent { event ->
+            when (event.type) {
+                SDL_EVENT_QUIT -> {
                     isRunning = false
+                }
+                SDL_EVENT_KEY_DOWN -> {
+                    if (event.key.key == SDLK_ESCAPE) {
+                        isRunning = false
+                    }
                 }
             }
         }
 
-        val now = SDL_GetTicks().toFloat() / 1000.0f;  /* convert from milliseconds to seconds. */
-        /* choose the color for the frame we will draw. The sine wave trick makes it fade between colors smoothly. */
+        val now = Sdl.getTicks().toFloat() / 1000.0f;
         val red = (0.5 + 0.5 * SDL_sin(now.toDouble()));
         val green = (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 2 / 3));
         val blue = (0.5 + 0.5 * SDL_sin(now + SDL_PI_D * 4 / 3));
-        SDL_SetRenderDrawColorFloat(
-            renderer,
-            red.toFloat(),
-            green.toFloat(),
-            blue.toFloat(),
-            SDL_ALPHA_OPAQUE_FLOAT
-        );  /* new color, full alpha. */
-        SDL_RenderClear(renderer);
+        renderer.setDrawColor(red, green, blue, SDL_ALPHA_OPAQUE_FLOAT)
+        renderer.clear()
 
-        memScoped {
-            val dstRect = alloc<SDL_FRect>()
-            val tw = alloc<FloatVar>()
-            val th = alloc<FloatVar>()
-            SDL_GetTextureSize(texture, tw.ptr, th.ptr)
+        val dstRect = fRect(
+            (SDL_sin(now.toDouble()).toFloat() * 30f) + 100,
+            (SDL_cos(now.toDouble()).toFloat() * 30f) + 100,
+            texture.width,
+            texture.height
+        )
 
-            dstRect.x =  (SDL_sin(now.toDouble()).toFloat() * 30f)+100
-            dstRect.y = (SDL_cos(now.toDouble()).toFloat() * 30f)+100
-            dstRect.w = tw.value
-            dstRect.h = th.value
-
-            SDL_RenderTexture(renderer, texture, null, dstRect.ptr)
-        }
-        SDL_RenderPresent(renderer);
-
+        renderer.drawTexture(texture, null, dstRect)
+        renderer.present()
     }
-    nativeHeap.free(workDir)
-    SDL_DestroyTexture(texture)
-    SDL_DestroyRenderer(renderer)
-    SDL_DestroyWindow(window)
-    SDL_Quit()
+
+    texture.destroy()
+    renderer.destroy()
+    window.destroy()
+    Sdl.quit()
 }

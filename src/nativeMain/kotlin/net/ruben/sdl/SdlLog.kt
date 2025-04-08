@@ -1,20 +1,16 @@
 package net.ruben.sdl
 
 import kotlinx.cinterop.COpaquePointer
-import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.StableRef
 import kotlinx.cinterop.asStableRef
 import kotlinx.cinterop.staticCFunction
 import kotlinx.cinterop.toKString
 
-@OptIn(ExperimentalForeignApi::class)
 private data class CallbackData(
     val callback: (userData: COpaquePointer?, category: Int, priority: SDL_LogPriority, message: String?) -> Unit,
     val userdata: COpaquePointer?
 ) {}
 
-
-@OptIn(ExperimentalForeignApi::class)
 object SdlLog {
     fun setLogCallback(
         userData: COpaquePointer? = null,

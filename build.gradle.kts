@@ -31,6 +31,10 @@ kotlin {
                 resources.srcDir("resources")
             }
         }
+        all {
+            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            languageSettings.optIn("kotlin.experimental.ExperimentalNativeApi")
+        }
     }
 
     nativeTarget.apply {
