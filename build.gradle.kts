@@ -34,6 +34,7 @@ kotlin {
         all {
             languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
             languageSettings.optIn("kotlin.experimental.ExperimentalNativeApi")
+            languageSettings.optIn("kotlin.native.internal.InternalForKotlinNative")
         }
     }
 
@@ -46,8 +47,9 @@ kotlin {
         compilations.getByName("main") {
             cinterops {
                 val sdl by creating {
-                    definitionFile.set(project.file("src/nativeInterop/cinterop/sdl.def"))
+                    definitionFile.set(project.file("src/nativeInterop/cinterop/cgraphics.def"))
                     includeDirs("libs/include")
+                    compilerOpts("-DCIMGUI_DEFINE_ENUMS_AND_STRUCTS", "-DCIMGUI_USE_SDL3", "-DCIMGUI_USE_SDLGPU3")
                 }
             }
         }

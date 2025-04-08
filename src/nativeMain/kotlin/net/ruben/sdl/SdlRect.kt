@@ -3,6 +3,7 @@ package net.ruben.sdl
 import kotlinx.cinterop.NativePlacement
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.nativeHeap
+import net.ruben.c.graphics.*
 
 fun fRect(
     x: Float = 0F,

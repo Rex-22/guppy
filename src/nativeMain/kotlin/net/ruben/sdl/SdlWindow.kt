@@ -1,6 +1,7 @@
 package net.ruben.sdl
 
 import kotlinx.cinterop.CPointer
+import net.ruben.c.graphics.*
 
 class SdlWindow {
     private constructor()

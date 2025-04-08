@@ -1,5 +1,5 @@
-package = net.ruben.sdl
-staticLibraries = SDL3.lib SDL3_image.lib
+package = net.ruben.c.graphics
+staticLibraries = SDL3.lib SDL3_image.lib cimgui_with_backend.lib
 
 # Linux
 # headers.linux = SDL3/SDL.h SDL3/SDL_vulkan.h
@@ -26,6 +26,8 @@ staticLibraries = SDL3.lib SDL3_image.lib
 # linkerOpts.ios = -framework AVFoundation -framework CoreAudio -framework CoreHaptics -framework CoreMedia -framework CoreVideo -framework CoreFoundation -framework AudioToolbox -framework Metal -framework GameController -framework QuartzCore -framework UniformTypeIdentifiers -framework CoreText -framework UIKit -lm
 
 # Windows
-headers.mingw_x64 = SDL3/SDL.h SDL3/SDL_video.h SDL3/SDL_error.h SDL3/SDL_render.h SDL_image/SDL_image.h
+headers.mingw_x64 = SDL3/SDL.h SDL3/SDL_video.h SDL3/SDL_error.h SDL3/SDL_render.h SDL3/SDL_gpu.h SDL_image/SDL_image.h imgui/cimgui.h imgui/cimgui_impl.h
 libraryPaths.mingw_x64 = libs
-linkerOpts.mingw_x64 = -Lsdl -Lsdl_image
+linkerOpts.mingw_x64 = -Lsdl -Lsdl_image -Limgui_sdl3_vulkan -Lcimgui_with_backend
+---
+struct SDL_GPUTexture {};

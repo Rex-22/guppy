@@ -1,6 +1,7 @@
 package net.ruben.sdl
 
 import kotlinx.cinterop.*
+import net.ruben.c.graphics.*
 
 class SdlTexture {
     private constructor()

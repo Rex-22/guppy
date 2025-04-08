@@ -2,6 +2,7 @@ package net.ruben.sdl
 
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.ptr
+import net.ruben.c.graphics.*
 
 class SDLRenderer {
     private constructor()

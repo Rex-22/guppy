@@ -5,6 +5,7 @@ import kotlinx.cinterop.StableRef
 import kotlinx.cinterop.asStableRef
 import kotlinx.cinterop.staticCFunction
 import kotlinx.cinterop.toKString
+import net.ruben.c.graphics.*
 
 private data class CallbackData(
     val callback: (userData: COpaquePointer?, category: Int, priority: SDL_LogPriority, message: String?) -> Unit,

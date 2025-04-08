@@ -3,6 +3,7 @@ package net.ruben.sdl
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
+import net.ruben.c.graphics.*
 
 
 object Sdl {
